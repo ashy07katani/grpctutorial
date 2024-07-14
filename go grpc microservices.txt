@@ -1,0 +1,34 @@
+GRPC is based on http2
+http2 has one tcp connection that is less time consuming, http1 has one connection per request which is more time consuming. HTTP1 has plaintext headers, while in http2 header are compressed to binary.
+
+in grpc we have message and services.
+
+there are 4 types of rpc apis that we can use 
+1) unary : one request send, one response send. closest to rest
+2) server streaming :  one request, one or multiple response for live streaming data it could be used.
+3) client streaming :  multiple request, multiple responses. response can arrive in any order.
+
+// Unary RPC
+service PersonService {
+  rpc GetPerson (PersonRequest) returns (PersonResponse);
+}
+
+// Server Streaming RPC
+service PersonService {
+  rpc ListPeople (PeopleRequest) returns (stream PersonResponse);
+}
+
+// Client Streaming RPC
+service PersonService {
+  rpc UploadPeople (stream PersonRequest) returns (UploadStatus);
+}
+
+// Bidirectional Streaming RPC
+service PersonService {
+  rpc Chat (stream ChatMessage) returns (stream ChatMessage);
+}
+
+How to create grpc service from proto file.
+first create a proto file 
+then run this command depending on your project :
+ protoc -Igreet/proto --go_out=. --go_opt=module=grpctutorial --go-grpc_out=. --go-grpc_opt=module=grpctutorial greet/proto/greet.proto
